@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 function TopNav() {
   return (
-    <nav className="flex w-full items-center justify-between border-b p-4 text-x1 font-bold">
+    <nav className="flex w-full items-center justify-between border-w p-4 text-x1 font-bold">
      <div>Gallery</div>
      <div>Sign in</div>
     </nav>

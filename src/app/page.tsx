@@ -1,7 +1,8 @@
 // app/page.tsx
 import { db } from "~/server/db/index";  // Import the database connection
 import { posts } from "~/server/db/schema";  // Import the schema
-import Link from "next/link";
+
+export const dynamic = "force-dynamic"; 
 
 const mockUrls = [
   "https://qmod1bsj3d.ufs.sh/f/ja6jLbig3bsiVqG5N4dd9GC6ZQgpckU2qItM5BehFHPXNjY8",
