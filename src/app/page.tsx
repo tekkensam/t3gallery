@@ -1,40 +1,24 @@
 // app/page.tsx
-import { db } from "~/server/db/index";  // Import the database connection
-import { posts } from "~/server/db/schema";  // Import the schema
+import { db } from "~/server/db/index";
+import { image } from "~/server/db/schema";
 
-export const dynamic = "force-dynamic"; 
-
-const mockUrls = [
-  "https://qmod1bsj3d.ufs.sh/f/ja6jLbig3bsiVqG5N4dd9GC6ZQgpckU2qItM5BehFHPXNjY8",
-  "https://qmod1bsj3d.ufs.sh/f/ja6jLbig3bsiaglqY7Qbocq2Vfyz76BAOrlDYUSJXE1G3isN",
-  "https://qmod1bsj3d.ufs.sh/f/ja6jLbig3bsiq3NWx9EhK70FmVsZjJ2O5BaClWpnAwbNcQkY",
-  "https://qmod1bsj3d.ufs.sh/f/ja6jLbig3bsirQsngtWcIkp0DRgAFZmQiPcuXVEOS6Ywd5Ks"
-];
-
-const mockImages = mockUrls.map((url, index) => ({
-  id: index + 1,
-  url,
-}));
+export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  // Fetch posts from the database
-  const post = await db.select().from(posts);  // Query posts using drizzle
+  const imageList = await db.query.image.findMany({
+    orderBy: (img, { desc }) => desc(img.id),
+  });
 
   return (
     <main className="p-4">
       <div className="flex flex-wrap gap-4">
-        {post.map((post) => (
-          <div key={post.id} >{post.name}</div>
-        ))}
-            
-        {[...mockImages, ...mockImages, ...mockImages].map((image) => (
-          <div key={image.id} className="w-48">
+        {[...imageList,...imageList,...imageList].map((image,index) => (
+          <div key={image.id} className="flex w-48 flex-col">
             <img src={image.url} />
+            <div>{image.name}</div>
           </div>
         ))}
       </div>
-
-      
     </main>
   );
 }
