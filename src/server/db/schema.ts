@@ -1,27 +1,23 @@
 // Example model schema from the Drizzle docs
 // https://orm.drizzle.team/docs/sql-schema-declaration
 
-import { sql } from "drizzle-orm";
-import { index, pgTableCreator } from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";  // Make sure you're importing sql from drizzle-orm
+import { pgTableCreator, index } from "drizzle-orm/pg-core";  // Import necessary functions for schema creation
 
-/**
- * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
- * database instance for multiple projects.
- *
- * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
- */
+// This is where we define our table, using the pgTableCreator function
+// The pgTableCreator allows you to dynamically create tables with names prefixed with 't3gallery_'
 export const createTable = pgTableCreator((name) => `t3gallery_${name}`);
 
+// Defining the 'posts' table schema
 export const posts = createTable(
-  "post",
+  "post",  // Table name
   (d) => ({
-    id: d.integer().primaryKey().generatedByDefaultAsIdentity(),
-    name: d.varchar({ length: 256 }),
-    createdAt: d
-      .timestamp({ withTimezone: true })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-    updatedAt: d.timestamp({ withTimezone: true }).$onUpdate(() => new Date()),
+    id: d.integer("id").primaryKey().generatedByDefaultAsIdentity(),  // 'id' field as integer, primary key, auto-increment
+    name: d.varchar("name", { length: 256 }),  // 'name' field as varchar (string) with max length 256
+    createdAt: d.timestamp("createdAt", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`).notNull(),  // 'createdAt' field with timezone
+    updatedAt: d.timestamp("updatedAt", { withTimezone: true }).$onUpdate(() => new Date()),  // 'updatedAt' field, automatically updated
   }),
-  (t) => [index("name_idx").on(t.name)],
+  (t) => [
+    index("name_idx").on(t.name),  // Create an index on the 'name' field
+  ]
 );
